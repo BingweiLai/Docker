@@ -6,4 +6,3 @@ $r = $redis->info();
 
 echo  $r['run_id'] . '<br>' . $r['role'] . '<br><br>';
 
-echo '<pre>', print_r($r), '</pre>';
