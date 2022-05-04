@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  haproxy:
+   image: haproxy:test
+   container_name: haproxy-sentinel
+   volumes:
+    - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+   ports:
+    - 16379:6379
+    - 8404:8404
+   networks:  
+    docker-network:
+     ipv4_address: 192.16.0.20
+
+  sentinel1:
+    image: redis:test
+    container_name: redis-sentinel-1
+    ports:
+      - 26379:26379
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    volumes:
+      - ./sentinel1.conf:/usr/local/etc/redis/sentinel.conf
+    networks:  
+     docker-network:
+      
+  sentinel2:
+    image: redis:test
+    container_name: redis-sentinel-2
+    ports:
+      - 26380:26379
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    volumes:
+      - ./sentinel2.conf:/usr/local/etc/redis/sentinel.conf
+    networks:  
+     docker-network:
+         
+  sentinel3:
+    image: redis:test
+    container_name: redis-sentinel-3
+    ports:
+      - 26381:26379
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    volumes:
+      - ./sentinel3.conf:/usr/local/etc/redis/sentinel.conf
+    networks:  
+     docker-network:
+    
+      
+networks:  
+  docker-network:
+    external:
+      name: My_network
+  
