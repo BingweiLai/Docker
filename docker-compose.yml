@@ -8,16 +8,16 @@ services:
     - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
    ports:
     - 80:80
-   links:
-    - web1
-    - web2
    depends_on:
     - web1
     - web2
     - redis-slave2
+   links:
+     - web1
+     - web2
    networks:
       My_networkforall:
- 
+    
   web1:
     image: nginx:test
     container_name: web1
@@ -31,6 +31,7 @@ services:
     networks:
       My_networkforall:
 
+
   web2:
     image: nginx:test
     container_name: web2
@@ -43,6 +44,7 @@ services:
       - php2
     networks:
       My_networkforall:
+
 
   php1:
     image: php:test
