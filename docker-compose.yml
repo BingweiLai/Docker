@@ -20,27 +20,27 @@ services:
  
   web1:
     image: nginx:test
-    container_name: nginx_web1
+    container_name: web1
     volumes:
       - ./nginx/nginx1/default.conf:/etc/nginx/conf.d/default.conf
       - ./www/web1:/usr/share/nginx/html
     expose:
       - "80"
     links:
-      - php
+      - php1
     networks:
       My_networkforall:
 
   web2:
     image: nginx:test
-    container_name: nginx_web2
+    container_name: web2
     volumes:
       - ./nginx/nginx2/default.conf:/etc/nginx/conf.d/default.conf
       - ./www/web2:/usr/share/nginx/html
     expose:
       - "80"
     links:
-      - php
+      - php2
     networks:
       My_networkforall:
 
