@@ -1,12 +1,11 @@
 <?php
 
 $redis = new Redis();
-/*
-$redis ->connect('redis', 6379);
-$redis ->auth('123456');
+
+$redis ->connect('redis-master', 6379);
 echo "The connection is successful!";
 echo "Server is running: ". $redis->ping();
-*/
+
 $sentinel = array(
     array(
         'host' => '192.16.0.6',

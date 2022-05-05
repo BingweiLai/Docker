@@ -23,7 +23,7 @@ services:
     volumes:
       - ./www/web:/usr/share/nginx/html
     links:
-      - redis
+      - redis-master
     networks:
       My_networkforall:  
 
