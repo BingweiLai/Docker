@@ -8,10 +8,6 @@ services:
     - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
    ports:
     - 80:80
-   depends_on:
-    - web1
-    - web2
-    - redis-slave2
    links:
      - web1
      - web2
