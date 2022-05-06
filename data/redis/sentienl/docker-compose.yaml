@@ -10,8 +10,13 @@ services:
     - 16379:6379
     - 8404:8404
    networks:  
-    docker-network:
+    efk-network:
      ipv4_address: 192.16.0.20
+   logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: 192.16.0.30:24224
+        tag: haproxy
 
   sentinel1:
     image: redis:test
@@ -22,7 +27,12 @@ services:
     volumes:
       - ./sentinel1.conf:/usr/local/etc/redis/sentinel.conf
     networks:  
-     docker-network:
+     efk-network:
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: 192.16.0.30:24224
+        tag: sentinel1
       
   sentinel2:
     image: redis:test
@@ -33,7 +43,12 @@ services:
     volumes:
       - ./sentinel2.conf:/usr/local/etc/redis/sentinel.conf
     networks:  
-     docker-network:
+     efk-network:
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: 192.16.0.30:24224
+        tag: sentinel2
          
   sentinel3:
     image: redis:test
@@ -44,11 +59,16 @@ services:
     volumes:
       - ./sentinel3.conf:/usr/local/etc/redis/sentinel.conf
     networks:  
-     docker-network:
+     efk-network:
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: 192.16.0.30:24224
+        tag: sentinel3
     
       
-networks:  
-  docker-network:
+networks: 
+  efk-network:
     external:
-      name: My_network
+     name: efk-network
   

@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  
+  fluentd:
+    image: fluentd:test
+    container_name: fluentd
+    volumes:
+      - ./fluentd:/fluentd/etc
+    ports:
+      - 24224:24224
+      - 24224:24224/udp
+    links:
+      - elasticsearch
+    networks: 
+     efk-network:
+       ipv4_address: 192.16.0.30
+    depends_on:
+      - elasticsearch
+  
+  elasticsearch:
+    image: elasticsearch:8.2.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    networks:
+      efk-network:
+        ipv4_address: 192.16.0.31
+    ports:
+      - 9200:9200
+
+  kibnana:
+    image: kibana:8.2.0
+    container_name: kibana
+    networks:
+      efk-network:
+        ipv4_address: 192.16.0.32
+    ports:
+      - 5601:5601
+    links:
+      - elasticsearch
+    depends_on:
+      - elasticsearch
+
+networks:  
+  efk-network:
+    driver: bridge
+    name: efk-network
+    ipam:
+     config:
+      - subnet: 192.16.0.0/16
+        gateway: 192.16.0.1

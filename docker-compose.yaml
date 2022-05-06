@@ -12,7 +12,12 @@ services:
    links:
     - php
    networks:
-    My_networkforall:
+    efk-network:
+   logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: 192.16.0.30:24224
+        tag: nginx
 
   php:
     image: php:test
@@ -25,7 +30,12 @@ services:
     links:
       - redis-master
     networks:
-      My_networkforall:  
+      efk-network:  
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: 192.16.0.30:24224
+        tag: php
 
   redis-master:
     image: redis:test
@@ -35,28 +45,38 @@ services:
     volumes:
       - ./data/redis/redis-master/redis.conf:/etc/redis/redis.conf
     networks:
-      My_networkforall:
+      efk-network:
         ipv4_address: 192.16.0.6
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: 192.16.0.30:24224
+        tag: redis-master
 
   redis-slave1:
     image: redis:test
     container_name: redis-slave1
     ports:
-      - 6380:6380
+      - 6380:6379
     volumes:
       - ./data/redis/redis-slave1/redis.conf:/etc/redis/redis.conf
     command: redis-server --slaveof redis-master 6379
     depends_on:
       - redis-master
     networks:
-      My_networkforall:
+      efk-network:
         ipv4_address: 192.16.0.7
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: 192.16.0.30:24224
+        tag: redis-slave1
 
   redis-slave2:
     image: redis:test
     container_name: redis-slave2
     ports:
-      - 6381:6381
+      - 6381:6379
     volumes:
       - ./data/redis/redis-slave2/redis.conf:/etc/redis/redis.conf
     command: redis-server --slaveof redis-master 6379
@@ -64,15 +84,15 @@ services:
       - redis-master
       - redis-slave1
     networks:
-      My_networkforall:
+      efk-network:
         ipv4_address: 192.16.0.8
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: 192.16.0.30:24224
+        tag: redis-slave2
 
-networks: 
-#建立一個給所有container使用的網路 
-  My_networkforall:
-    driver: bridge
-    name: My_network
-    ipam:
-      config:
-       - subnet: 192.16.0.0/16
-         gateway: 192.16.0.1
+networks:  
+  efk-network:
+    external:
+     name: efk-network
