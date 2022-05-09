@@ -16,7 +16,7 @@ services:
       driver: "fluentd"
       options:
         fluentd-address: 192.16.0.30:24224
-        tag: haproxy
+        tag: haproxy-sentinel
 
   sentinel1:
     image: redis:test
