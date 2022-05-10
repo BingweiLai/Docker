@@ -1,7 +1,7 @@
 version: "3.8"
 services:
 
-
+  #haproxy
   haproxy:
    image: haproxy:test
    container_name: haproxy-web
@@ -15,12 +15,8 @@ services:
    networks:  
     efk-network:
      ipv4_address: 192.16.0.40
-   logging:
-      driver: "fluentd"
-      options:
-        fluentd-address: 192.16.0.30:24224
-        tag: haproxy-web
   
+  #web-nginx
   web1:
    image: nginx:test
    container_name: web1
@@ -42,27 +38,6 @@ services:
         fluentd-address: 192.16.0.30:24224
         tag: nginx1
 
-
-  php1:
-    image: php:test
-    container_name: php1
-    restart: always
-    expose:
-      - "9000"
-    volumes:
-      - ./www/web1:/usr/share/nginx/html
-    links:
-      - redis-master
-    networks:
-      efk-network:
-    depends_on:
-     - redis-slave2  
-    logging:
-      driver: "fluentd"
-      options:
-        fluentd-address: 192.16.0.30:24224
-        tag: php1
-
   web2:
    image: nginx:test
    container_name: web2
@@ -83,7 +58,26 @@ services:
       options:
         fluentd-address: 192.16.0.30:24224
         tag: nginx2
-
+  #web-php
+  php1:
+    image: php:test
+    container_name: php1
+    restart: always
+    expose:
+      - "9000"
+    volumes:
+      - ./www/web1:/usr/share/nginx/html
+    links:
+      - redis-master
+    networks:
+      efk-network:
+    depends_on:
+     - redis-slave2  
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: 192.16.0.30:24224
+        tag: php1
 
   php2:
     image: php:test
@@ -105,6 +99,7 @@ services:
         fluentd-address: 192.16.0.30:24224
         tag: php2
 
+  #redis
   redis-master:
     image: redis:test
     container_name: redis-master
@@ -160,6 +155,7 @@ services:
         fluentd-address: 192.16.0.30:24224
         tag: redis-slave2
 
+#network
 networks:  
   efk-network:
     external:
