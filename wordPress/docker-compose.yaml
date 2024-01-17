@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  db:
+    image: mysql:8.2.0
+    ports:
+    - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wpdb
+      MYSQL_USER: consle
+      MYSQL_PASSWORD: x941u/3jo6
+  adminer:
+    image: adminer
+    ports:
+    - 8080:8080
+  wordpress:
+    image: wordpress:5.7.1
+    ports:
+    - 80:80
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: consle
+      WORDPRESS_DB_PASSWORD: x941u/3jo6
+      WORDPRESS_DB_NAME: wpdb
