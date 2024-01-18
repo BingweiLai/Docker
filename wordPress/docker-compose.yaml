@@ -9,8 +9,10 @@ services:
       MYSQL_DATABASE: wpdb
       MYSQL_USER: consle
       MYSQL_PASSWORD: x941u/3jo6
+    volumes:
+    - ./db-data:/var/lib/mysql
   adminer:
-    image: adminer
+    image: adminer:4.8.1
     ports:
     - 8080:8080
   wordpress:
@@ -22,3 +24,5 @@ services:
       WORDPRESS_DB_USER: consle
       WORDPRESS_DB_PASSWORD: x941u/3jo6
       WORDPRESS_DB_NAME: wpdb
+    volumes:
+    - ./wp-data:/var/www/html
