@@ -15,8 +15,10 @@ services:
     image: adminer:4.8.1
     ports:
     - 8080:8080
+    depends_on:
+    - db
   wordpress:
-    image: wordpress:5.7.1
+    image: wordpress:6.4.2
     ports:
     - 80:80
     environment:
@@ -26,3 +28,5 @@ services:
       WORDPRESS_DB_NAME: wpdb
     volumes:
     - ./wp-data:/var/www/html
+    depends_on:
+    - db
